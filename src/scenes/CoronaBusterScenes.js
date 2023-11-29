@@ -8,11 +8,22 @@ export default  class  CoronaBusterScene extends Phaser.Scene {
     // METHOD  INIT
     init(){
         this.clouds = undefined
+        this.player = undefined;
+
+        this.speed = 100
+        this.nav_left = undefined
+        this.nav_right = undefined
     }
 
 
     // METHOD PRELOAD
     preload(){
+        this.load.spritesheet('player', 'images/ship.png', {
+
+            frameWidth: 66,
+            frameHeight: 66
+            
+            })
         this.load.image('background', 'images/bg_layer1.png')
         //load the cloud image
         this.load.image('cloud', 'images/cloud.png')
@@ -52,6 +63,44 @@ export default  class  CoronaBusterScene extends Phaser.Scene {
                 child.y = 0
             }
         })
+        this.player = this.createPlayer()  
+    }
+
+    // METHOD PLAYER
+    createPlayer()  {
+        const player = this.physics.add.sprite(200, 450, 'player')
+        player.setCollideWorldBounds(true)
+
+        this.anims.create({
+            key: 'turn',
+            frames: [ {
+                key: 'player',frame: 0
+            }],
+        })
+        this.anims.create({
+            key: 'left',
+            frames: this.anims.generateFrameNumbers('player',{
+                start: 1,end: 2
+            })
+        })
+        return player
+    }
+
+    // METHOD PLAYER MOVEMENT
+    movePlayer(player, time)  {
+        if (this.nav_left ){
+            this.player.setVelocityX(this.speed * -1)
+
+            this.player.anims.play('left', true)
+            this.player.setFlipX(false)
+        } else if (this.nav_right) {
+            this.player.setVelocityX(this.speed)
+            this.player.anims.play('right', true)
+            this.player.setFlipX(true)
+        } else {
+            this.player.setVelocityX(0)
+            this.player.anims.play('turn')
+        }
     }
 }
 
