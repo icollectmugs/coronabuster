@@ -11,8 +11,9 @@ export default  class  CoronaBusterScene extends Phaser.Scene {
         this.player = undefined;
 
         this.speed = 100
-        this.nav_left = undefined
+        this.nav_left = false
         this.nav_right = undefined
+        this.shoot = false;
     }
 
 
@@ -54,7 +55,7 @@ export default  class  CoronaBusterScene extends Phaser.Scene {
     update(time){
         this.clouds.children.iterate((child) => {
             // @ts-ignore
-            child.SetVelocityY(20);
+            child.setVelocityY(20);
             // @ts-ignore
             if(child.y > this.scale.height){
                 // @ts-ignore
@@ -64,6 +65,23 @@ export default  class  CoronaBusterScene extends Phaser.Scene {
             }
         })
         this.player = this.createPlayer()  
+    }
+
+    //METHOD CREATE BUTTONS
+    createButton () {
+        this.input.addPointer(3)
+
+        let shoot =  this.add.image(320, 550, 'shoot')
+            .setInteractive().setDepth(0.5).setAlpha(0.8)
+
+        let nav_left = this.add.image(50, 550, 'left-btn')
+            .setInteractive().setDepth(0.5).setAlpha(0.8)
+            
+        let  nav_right = this.add.image(nav_left.x +
+        nav_left.displayWidth+20, 550, 'right-btn')  
+            .setInteractive().setDepth(0.5).setAlpha(0.8)
+
+        // nav_left.on('pointerdown',  () =>   
     }
 
     // METHOD PLAYER
